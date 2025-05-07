@@ -1,0 +1,35 @@
+body{
+    margin: 0px;
+    height: 100vh;
+    background-image: url("/static/img/b1.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+main{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.jeden, .dwa, .trzy, .cztery{
+    width: 47%;
+    height: 45vh;
+    margin: 1%;
+
+    /* # background: rgba( 255, 255, 255, 0.15 ); */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur( 3px );
+    -webkit-backdrop-filter: blur( 3px );
+    border-radius: 10px;
+
+}
+
+.jeden{
+    display: flex;
+    justify-content: center;
+    color: black;
+    text-decoration: double;
+}
+

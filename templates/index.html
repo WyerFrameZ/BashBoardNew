@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hej</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main>
+        <section class="jeden">
+            <canvas id="networkChart" style="width: 40vh; height: 40%;"></canvas>
+        </section>
+        
+        <section class="dwa">
+            <canvas id="bar-chart" style="width: 40vh;height: 40%;"></canvas>
+        </section>
+
+        <section class="trzy">
+            <canvas id="ramChart" style="width: 40vh;height: 40%;"></canvas>
+        </section>
+
+        <section class="cztery">
+            <canvas id="cpuChart" style="width: 40vh;height: 40%;"></canvas>
+        </section>
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <script>
+        new Chart(document.getElementById("bar-chart"), {
+            type: 'bar',
+            data: {
+                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                datasets: [
+                    {
+                        label: "Population (millions)",
+                        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                        data: [2478,5267,734,784,433]
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Predicted world population (millions) in 2050'
+                    }
+                }
+            }
+        });
+
+        const xyValues = [
+            {x:1, y:7}, {x:2, y:8}, {x:3, y:8}, {x:4, y:9}, {x:5, y:9},
+            {x:6, y:9}, {x:7, y:10}, {x:8, y:11}, {x:9, y:14}, {x:10, y:14}, {x:11, y:15}
+        ];
+
+        const networkChart = new Chart(document.getElementById('networkChart'), {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'Download (Mbps)',
+                data: [],
+                borderColor: 'blue',
+                backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                fill: true,
+                tension: 0.3
+            },
+            {
+                label: 'Upload (Mbps)',
+                data: [],
+                borderColor: 'purple',
+                backgroundColor: 'rgba(128, 0, 128, 0.1)',
+                fill: true,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                type: 'category',
+                ticks: {
+                    color: 'black',
+                    font: { weight: 'bold' }
+                },
+                grid: { color: 'rgba(0,0,0,0.1)' }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: 'black',
+                    font: { weight: 'bold' },
+                    callback: value => value + ' Mbps'
+                },
+                grid: { color: 'rgba(0,0,0,0.1)' }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Ruch sieciowy',
+                font: { size: 16, weight: 'bold' }
+            },
+            legend: {
+                labels: {
+                    font: { weight: 'bold' },
+                    color: 'black'
+                }
+            }
+        }
+    }
+});
+
+
+
+        const ramChart = new Chart(document.getElementById('ramChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Zurzycie RAM (%)',
+                    data: [],
+                    borderColor: 'blue',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',
+                        ticks: {
+                            color: 'DeepPink',
+                            font: { weight: 'bold' }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 128, 0.2)'
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            color: 'navy',
+                            font: { weight: 'bold' },
+                            callback: value => value + " %"
+                        },
+                        grid: {
+                            color: 'rgba(0, 128, 0, 0.2)'
+                        }
+                    }
+                }
+            }
+        });
+
+        const cpuChart = new Chart(document.getElementById('cpuChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Zurzycie CPU (%)',
+                    data: [],
+                    borderColor: 'red',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Czas (s)',
+                            color: 'DeepPink',
+                            font: { weight: 'bold' }
+                        },
+                        ticks: {
+                            color: 'DeepPink',
+                            font: { weight: 'bold' }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 128, 0.2)'
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            color: 'red',
+                            font: { weight: 'bold' }
+                        },
+                        ticks: {
+                            color: 'red',
+                            font: { weight: 'bold' },
+                            callback: value => value + " %"
+                        },
+                        grid: {
+                            color: 'rgba(0, 128, 0, 0.2)'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 0
+                }
+            }
+        });
+
+        function fetchData() {
+    fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+            const currentTime = new Date().toLocaleTimeString();
+
+            // PAMIEC RAM
+            ramChart.data.labels.push(currentTime);
+            ramChart.data.datasets[0].data.push(data.ram);
+            if (ramChart.data.labels.length > 50) {
+                ramChart.data.labels.shift();
+                ramChart.data.datasets[0].data.shift();
+            }
+            ramChart.update();
+
+            // PROCESOR
+            cpuChart.data.labels.push(currentTime);
+            cpuChart.data.datasets[0].data.push(data.cpu);
+            if (cpuChart.data.labels.length > 50) {
+                cpuChart.data.labels.shift();
+                cpuChart.data.datasets[0].data.shift();
+            }
+            cpuChart.update();
+
+            // SIEICOWE DANE
+            networkChart.data.labels.push(currentTime);
+            networkChart.data.datasets[0].data.push(data.network_download);
+            networkChart.data.datasets[1].data.push(data.network_upload);
+            if (networkChart.data.labels.length > 50) {
+                networkChart.data.labels.shift();
+                networkChart.data.datasets[0].data.shift();
+                networkChart.data.datasets[1].data.shift();
+            }
+            networkChart.update();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+
+
+        
+        setInterval(fetchData, 1000);
+    </script>
+</body>
+</html>

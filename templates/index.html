@@ -13,7 +13,7 @@
         </section>
         
         <section class="dwa">
-            <canvas id="bar-chart" style="width: 40vh;height: 40%;"></canvas>
+            <canvas id="diskChart" style="width: 40vh; height: 40%;"></canvas>
         </section>
 
         <section class="trzy">
@@ -29,33 +29,46 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
     <script>
-        new Chart(document.getElementById("bar-chart"), {
-            type: 'bar',
-            data: {
-                labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-                datasets: [
-                    {
-                        label: "Population (millions)",
-                        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                        data: [2478,5267,734,784,433]
-                    }
-                ]
+const diskChart = new Chart(document.getElementById('diskChart'), {
+    type: 'line',
+    data: {
+        labels: [],  // Czas
+        datasets: [
+            {
+                label: 'Zapis (MB/s)',
+                data: [],  // Początkowe dane
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false,
+                tension: 0.1
             },
-            options: {
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Predicted world population (millions) in 2050'
-                    }
+            {
+                label: 'Odczyt (MB/s)',
+                data: [],  // Początkowe dane
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) { return value + ' MB/s'; }
                 }
             }
-        });
+        }
+    }
+});
 
-        const xyValues = [
-            {x:1, y:7}, {x:2, y:8}, {x:3, y:8}, {x:4, y:9}, {x:5, y:9},
-            {x:6, y:9}, {x:7, y:10}, {x:8, y:11}, {x:9, y:14}, {x:10, y:14}, {x:11, y:15}
-        ];
+
+
+
+
+
+
 
         const networkChart = new Chart(document.getElementById('networkChart'), {
     type: 'line',
@@ -239,7 +252,21 @@
             }
             cpuChart.update();
 
-            // SIEICOWE DANE
+            // ZUŻYCIE DYSKU (ODCZYT I ZAPIS)
+            
+
+diskChart.data.labels.push(currentTime);
+diskChart.data.datasets[0].data.push(data.disk_write);
+diskChart.data.datasets[1].data.push(data.disk_read);
+
+if (diskChart.data.labels.length > 50) {
+    diskChart.data.labels.shift();
+    diskChart.data.datasets[0].data.shift();
+    diskChart.data.datasets[1].data.shift();
+}
+
+diskChart.update();
+            // SIEĆ
             networkChart.data.labels.push(currentTime);
             networkChart.data.datasets[0].data.push(data.network_download);
             networkChart.data.datasets[1].data.push(data.network_upload);
@@ -252,6 +279,7 @@
         })
         .catch(error => console.error('Error fetching data:', error));
 }
+
 
 
 
